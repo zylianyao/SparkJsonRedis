@@ -36,7 +36,7 @@ public class Test {
         // matches "GET /hello/foo" and "GET /hello/bar"
         // request.params(":name") is 'foo' or 'bar'
         get("/hello/:name", (request, response) -> {
-            return "Hello: " + request.params(":name");
+            return Tmpl.render("hello.html", request.params());
         });
         // matches "GET /say/hello/to/world"
         // request.splat()[0] is 'hello' and request.splat()[1] 'world'
@@ -47,6 +47,9 @@ public class Test {
             map.put("2", request.splat()[1]);
             logger.debug("$$$$$$$$$$$$$$$$$" + JSON.toJSON(map).toString());
             return JSON.toJSON(map);
+        });
+        get("/home", (request, response) -> {
+            return Tmpl.render("index.html");
         });
         int i = 0;
         while (true) {
