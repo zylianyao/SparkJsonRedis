@@ -52,6 +52,7 @@ public class Test {
             return Tmpl.render("index.html");
         });
         int i = 0;
+        //启动轮询，定时发送消息
         while (true) {
             try {
                 Thread.currentThread().sleep(1000);
