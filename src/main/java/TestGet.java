@@ -27,7 +27,7 @@ public class TestGet {
                         semp.acquire();
                         System.out.println("------------------|" + NO + "|------------------");
                         HttpResponse response = HttpRequest
-                                .get("http://localhost:4567/say/Hello-" + NO + "/to/World" + NO
+                                .get("http://localhost:9090/say/Hello-" + NO + "/to/World" + NO
                                 )
                                 .acceptEncoding("gzip")
                                 .send();
@@ -43,7 +43,6 @@ public class TestGet {
             };
             exec.execute(run);
         }
-        System.out.println("------------------" + (System.currentTimeMillis() - time) + "------------------");
         exec.shutdown();
     }
 }

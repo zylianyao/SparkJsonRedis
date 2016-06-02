@@ -5,14 +5,21 @@
  */
 
 import com.alibaba.fastjson.JSON;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
-import static spark.Spark.get;
+import static spark.Spark.*;
 
 public class Test {
+    private static Logger logger = LoggerFactory.getLogger(Test.class);
 
     public static void main(String[] args) {
+        port(9090);
+        //EchoWebSocket不能是内部类
+        webSocket("/echo", EchoWebSocket.class);
+        init();
 //        //获取redis连接池
 //        JedisPool pool = new JedisPool(new JedisPoolConfig(), "localhost");
 //        try (Jedis jedis = pool.getResource()) {
@@ -38,8 +45,23 @@ public class Test {
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put("1", request.splat()[0]);
             map.put("2", request.splat()[1]);
+            logger.debug("$$$$$$$$$$$$$$$$$" + JSON.toJSON(map).toString());
             return JSON.toJSON(map);
         });
+        int i = 0;
+        while (true) {
+            try {
+                Thread.currentThread().sleep(1000);
+                i++;
+                logger.debug("--->" + i);
+                if (i % 5 == 1) {
+                    EchoWebSocket.send(i);
+                    logger.debug("--->第" + i + "次发送");
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
